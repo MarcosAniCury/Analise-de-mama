@@ -73,6 +73,42 @@ def update_image(*args):
     label_imagem.configure(image=output_img_tk)
     label_imagem.image = output_img_tk
 
+def zoom_in():
+    global imagem_atual_resize, imagem_atual_photo
+
+    # Obtém as dimensões atuais da imagem redimensionada
+    width, height = imagem_atual_resize.size
+
+    # Calcula as novas dimensões para o zoom
+    new_width = int(width * 1.1)
+    new_height = int(height * 1.1)
+
+    # Redimensiona a imagem atual para o zoom
+    imagem_atual_resize = imagem_atual_resize.resize((new_width, new_height), Image.LANCZOS)
+
+    # Atualiza a imagem atual e a imagem exibida
+    imagem_atual_photo = ImageTk.PhotoImage(imagem_atual_resize)
+    label_imagem.configure(image=imagem_atual_photo)
+    label_imagem.image = imagem_atual_photo
+
+def zoom_out():
+    global imagem_atual_resize, imagem_atual_photo
+
+    # Obtém as dimensões atuais da imagem redimensionada
+    width, height = imagem_atual_resize.size
+
+    # Calcula as novas dimensões para o zoom
+    new_width = int(width / 1.1)
+    new_height = int(height / 1.1)
+
+    # Redimensiona a imagem atual para o zoom
+    imagem_atual_resize = imagem_atual_resize.resize((new_width, new_height), Image.LANCZOS)
+
+    # Atualiza a imagem atual e a imagem exibida
+    imagem_atual_photo = ImageTk.PhotoImage(imagem_atual_resize)
+    label_imagem.configure(image=imagem_atual_photo)
+    label_imagem.image = imagem_atual_photo
+
 
 global indice_imagem
 indice_imagem = 0
@@ -95,19 +131,37 @@ imagem_atual_gray = imagem_atual.convert('L')  # converte para escala de cinza
 imagem_atual_resize = imagem_atual_gray.resize((300, 400), Image.LANCZOS)
 imagem_atual_photo = ImageTk.PhotoImage(imagem_atual_resize)
 
-# cria um widget Label e exibe a imagem na janela
-label_imagem = Label(janela, image=imagem_atual_photo)
-label_imagem.pack()
+# Cria um widget Label e exibe a imagem na janela
+label_imagem = Label(janela, width=800, height=600)
+label_imagem.grid(row=0, column=0, padx=10, pady=10)
 
-botao = Button(janela, text="Selecionar Imagem", command=abrir_explorador)
-botao.pack()
+# Atualizar o Label com a imagem atual
+label_imagem.configure(image=imagem_atual_photo)
+label_imagem.image = imagem_atual_photo  # Atualiza a referência da imagem no Label
 
-min_slider = Scale(janela, from_=0, to=255, orient='horizontal', label='Valor mínimo', command=update_image)
-min_slider.pack()
+# Cria um frame para os botões
+frame_controles = Frame(janela)
+frame_controles.grid(row=1, column=0, padx=10, pady=10)
 
-max_slider = Scale(janela, from_=0, to=255, orient='horizontal', label='Valor máximo', command=update_image)
-max_slider.pack()
+# Cria os controles
+botao_selecionar = Button(frame_controles, text="Trocar Imagem", command=abrir_explorador)
+botao_selecionar.grid(row=0, column=0, padx=5)
 
-# inicia o loop principal do Tkinter
+min_slider = Scale(frame_controles, from_=0, to=255, orient='horizontal', label='Valor mínimo', command=update_image)
+min_slider.grid(row=0, column=1, padx=5)
+
+max_slider = Scale(frame_controles, from_=0, to=255, orient='horizontal', label='Valor máximo', command=update_image)
+max_slider.grid(row=0, column=2, padx=5)
+
+botao_zoom_in = Button(frame_controles, text="Zoom In", command=zoom_in)
+botao_zoom_in.grid(row=0, column=3, padx=5)
+
+botao_zoom_out = Button(frame_controles, text="Zoom Out", command=zoom_out)
+botao_zoom_out.grid(row=0, column=4, padx=5)
+
+# Configura a coluna 0 do grid para expandir
+janela.grid_columnconfigure(0, weight=1)
+
+# Exibe a janela
 janela.mainloop()
 
