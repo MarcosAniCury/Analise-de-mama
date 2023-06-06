@@ -3,15 +3,17 @@ import cv2
 import numpy as np
 import os
 
-# Diretório das imagens de treino
-train_dir = "treino"
-augmented_dir = "treino_mais"
+def criacao_pastas():
+    augmented_dir = "treino_mais"
 
-# Criar o diretório para as imagens aumentadas
-os.makedirs(augmented_dir, exist_ok=True)
+    # Criar o diretório para as imagens aumentadas
+    os.makedirs(augmented_dir, exist_ok=True)
+
+    return augmented_dir
 
 # Função para realizar o aumento de dados em uma imagem
-def augment_image(image_path, save_dir):
+def criacao_imagens(image_path):
+    save_dir = criacao_pastas()
     # Carregar a imagem com a biblioteca Pillow
     image_pil = Image.open(image_path)
 
@@ -45,9 +47,12 @@ def augment_image(image_path, save_dir):
     else:
         print(f"Erro ao carregar a imagem: {image_path}")
 
-# Percorrer todas as imagens na pasta de treino
-for root, dirs, files in os.walk(train_dir):
-    for file in files:
-        if file.endswith(".png") or file.endswith(".jpg") or file.endswith(".jpeg"):
-            image_path = os.path.join(root, file)
-            augment_image(image_path, augmented_dir)
+def augmentacao():
+    # Diretório das imagens de treino
+    train_dir = "treino"
+    # Percorrer todas as imagens na pasta de treino
+    for root, dirs, files in os.walk(train_dir):
+        for file in files:
+            if file.endswith(".png") or file.endswith(".jpg") or file.endswith(".jpeg"):
+                image_path = os.path.join(root, file)
+                criacao_imagens(image_path)
