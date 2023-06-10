@@ -1,5 +1,6 @@
 from tkinter import *
 import os
+from tkinter import ttk
 
 class TelaCNN:
     def __init__(self, janela):
@@ -38,6 +39,19 @@ class TelaCNN:
         self.frame_botoes.grid_columnconfigure(1, weight=1)
         self.frame_botoes.grid_columnconfigure(2, weight=1)
         self.frame_botoes.grid_columnconfigure(3, weight=1)
+
+        self.frame_switch = Frame(self.janela, width=500, height=50)
+        self.frame_switch.configure(background="white")
+        self.frame_switch.grid(row=2, column=0, pady=10)
+
+        self.label_switch = Label(self.frame_switch, text="Treinar:", font=("Arial", 14))
+        self.label_switch.configure(background="white")
+        self.label_switch.grid(row=0, column=0, padx=5, sticky="e")
+
+        self.switch_var = StringVar(value="Não")
+        self.switch = ttk.Combobox(self.frame_switch, textvariable=self.switch_var, values=["Não", "Sim"], state="readonly")
+        self.switch.grid(row=0, column=1, padx=5, sticky="w")
+
 
     def mostrar_texto_binario_nao_segmentado(self):
         texto = self.ler_arquivo("resultados/texto.txt")
