@@ -1,6 +1,7 @@
 import os
 import cv2
-from utils import separacao_imagens
+import time
+from utils import separacao_imagens, escrever_em_arquivo
 from segmentar_imagens import remove_variacoes_imagem, remove_contornos_menores
 from aumento_imagens import augmentacao
 from Cnn import GoogLenNet
@@ -28,9 +29,17 @@ def tratar_imagens():
                     print(arquivo)
 
 def execucao():
-    # separacao_imagens()
-    # tratar_imagens()
-    # augmentacao()
-    GoogLenNet()
+    arquive_name = input("Digite o nome do arquivo para armazenamento: ")
+    eBinarioClassificador = True
+    already_trained = False
+    start_time = time.time()
+    if not already_trained:
+        separacao_imagens(eBinarioClassificador) 
+        tratar_imagens()
+        augmentacao(eBinarioClassificador)
+    metrict = GoogLenNet(arquive_name, already_trained, eBinarioClassificador)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    escrever_em_arquivo(arquive_name, execution_time, metrict, eBinarioClassificador)
 
 execucao()

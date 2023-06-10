@@ -4,16 +4,21 @@ import numpy as np
 import os
 
 
-def criacao_pastas():
+def criacao_pastas(eBinarioClassificador=False):
     augmented_dir = "treino_mais"
 
     # Criar o diretório para as imagens aumentadas
     os.makedirs(augmented_dir, exist_ok=True)
 
     class_dir = "BIRADS_"
-    for i in range(1, 5):
-        os.makedirs(os.path.join(augmented_dir,
-                    f"{class_dir}{i}"), exist_ok=True)
+    if eBinarioClassificador:
+        for i in range(1, 4, 2):
+            os.makedirs(os.path.join(augmented_dir,
+                        f"{class_dir}{i}_{i+1}"), exist_ok=True)
+    else:
+        for i in range(1, 5):
+            os.makedirs(os.path.join(augmented_dir,
+                        f"{class_dir}{i}"), exist_ok=True)
 
 # Função para realizar o aumento de dados em uma imagem
 
@@ -56,8 +61,8 @@ def criacao_imagens(image_path):
         print(f"Erro ao carregar a imagem: {image_path}")
 
 
-def augmentacao():
-    criacao_pastas()
+def augmentacao(eBinarioClassificador=False):
+    criacao_pastas(eBinarioClassificador)
     # Diretório das imagens de treino
     train_dir = "treino"
     # Percorrer todas as imagens na pasta de treino
