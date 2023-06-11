@@ -131,6 +131,10 @@ indice_imagem = 0
 
 # cria uma janela
 janela = Tk()
+janela.title("Contraste e Zoom")
+janela.geometry("800x700")
+janela.resizable(False, False)
+janela.configure(background="white")
 
 
 imagens = []
@@ -154,6 +158,7 @@ n_zooms = 0
 
 # Cria um widget Label e exibe a imagem na janela
 label_imagem = Label(janela, width=800, height=600)
+label_imagem.configure(background="white")
 label_imagem.grid(row=0, column=0, padx=10, pady=10)
 
 # Atualizar o Label com a imagem atual
@@ -162,6 +167,7 @@ label_imagem.image = imagem_original_photo  # Atualiza a referência da imagem n
 
 # Cria um frame para os botões
 frame_controles = Frame(janela)
+frame_controles.configure(background="white")
 frame_controles.grid(row=1, column=0, padx=10, pady=10)
 
 # Cria os controles
@@ -169,13 +175,15 @@ botao_selecionar = Button(frame_controles, text="Trocar Imagem", command=abrir_e
 botao_selecionar.grid(row=0, column=0, padx=5)
 
 min_slider = Scale(frame_controles, from_=1, to=255, orient='horizontal', label='Valor mínimo')
+min_slider.configure(background="white")
 min_slider.grid(row=0, column=1, padx=5)
 
 max_slider = Scale(frame_controles, from_=1, to=255, orient='horizontal', label='Valor máximo')
+max_slider.configure(background="white")
 max_slider.grid(row=0, column=2, padx=5)
 
-botao_zoom_in = Button(frame_controles, text="Janelamento", command=update_image_windowing)
-botao_zoom_in.grid(row=0, column=3, padx=5)
+botao_janelamento = Button(frame_controles, text="Janelamento", command=update_image_windowing)
+botao_janelamento.grid(row=0, column=3, padx=5)
 
 botao_zoom_in = Button(frame_controles, text="Zoom In", command=zoom_in)
 botao_zoom_in.grid(row=0, column=4, padx=5)
