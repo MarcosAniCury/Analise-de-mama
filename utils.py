@@ -75,7 +75,7 @@ def escrever_em_arquivo(arquive_name, execution_time, metrics, eBinarioClassific
         arquivo.write(f"Sensitivity Recall: {metrics['recall']}\n")
         arquivo.write(f"Specificity Specificity: {metrics['specificity']}\n")
         arquivo.write(f"Specificity Precision: {metrics['precision']}\n")
-        arquivo.write(f"Acurracy: {metrics['acurracy']}\n")
+        arquivo.write(f"Acurracy: {metrics['accuracy']}\n")
         arquivo.write(f"F1-Score: {metrics['f1-score']}\n")
 
     else:

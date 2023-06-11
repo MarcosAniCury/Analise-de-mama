@@ -1,0 +1,6 @@
+Tempo de execucao do codigo: 15242.82754778862
+Sensitivity Recall: 0.5
+Specificity Specificity: 0.5
+Specificity Precision: 0.25
+Acurracy: 0.5
+F1-Score: 0.3333333333333333
