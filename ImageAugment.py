@@ -2,16 +2,22 @@ from PIL import Image
 import cv2
 import numpy as np
 import os
+import shutil
 
 
-def criacao_pastas(eBinarioClassificador=False):
+def delete_folder(augmented_dir):
+    shutil.rmtree(augmented_dir)
+
+
+def create_folders(is_binarie_class=False):
     augmented_dir = "treino_mais"
+    delete_folder(augmented_dir)
 
     # Criar o diretório para as imagens aumentadas
     os.makedirs(augmented_dir, exist_ok=True)
 
     class_dir = "BIRADS_"
-    if eBinarioClassificador:
+    if is_binarie_class:
         for i in range(1, 4, 2):
             os.makedirs(os.path.join(augmented_dir,
                         f"{class_dir}{i}_{i+1}"), exist_ok=True)
@@ -23,7 +29,7 @@ def criacao_pastas(eBinarioClassificador=False):
 # Função para realizar o aumento de dados em uma imagem
 
 
-def criacao_imagens(image_path):
+def create_images(image_path):
     save_dir = "treino_mais"
     # Carregar a imagem com a biblioteca Pillow
     image_pil = Image.open(image_path)
@@ -61,8 +67,8 @@ def criacao_imagens(image_path):
         print(f"Erro ao carregar a imagem: {image_path}")
 
 
-def augmentacao(eBinarioClassificador=False):
-    criacao_pastas(eBinarioClassificador)
+def augument(is_binarie_class=False):
+    create_folders(is_binarie_class)
     # Diretório das imagens de treino
     train_dir = "treino"
     # Percorrer todas as imagens na pasta de treino
@@ -71,4 +77,4 @@ def augmentacao(eBinarioClassificador=False):
             for file in filesname:
                 if file.endswith(".png") or file.endswith(".jpg") or file.endswith(".jpeg"):
                     image_path = os.path.join(train_class_path, file)
-                    criacao_imagens(image_path)
+                    create_images(image_path)

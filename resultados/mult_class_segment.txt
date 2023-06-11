@@ -1,9 +1,7 @@
 Tempo de execucao do codigo: 15483.25561594963
-Sensitivity Recall: 0.24919871794871795
-Specificity Specificity: 0.749732905982906
-Matrix Confusion: [
-    [ 53  68 106  85]
-    [ 67  78  96  71]
-    [ 60  75 103  74]
-    [ 68  60 107  77]
-]
+Sensitivity Recall: 0.25721153846153844
+Specificity Specificity: 0.7524038461538461
+Matrix Confusion: [[ 57  75 100  80]
+ [ 73  71  98  70]
+ [ 66  62 110  74]
+ [ 52  73 104  83]]

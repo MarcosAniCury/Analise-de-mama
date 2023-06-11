@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from tkinter import filedialog
+import os
 
-def remove_variacoes_imagem(image):
+def remove_image_variation_color(image):
     # Converter a imagem para escala de cinza
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -30,7 +30,7 @@ def remove_variacoes_imagem(image):
 
     return segmented_image
 
-def remove_contornos_menores(image, threshold_area):
+def remove_small_items(image, threshold_area):
     # Converter a imagem para escala de cinza
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -57,19 +57,23 @@ def remove_contornos_menores(image, threshold_area):
 
     return result_image
 
-def example():
-    initial_path = "C:\\Users\\letic\\Documents\\GitHub\\Analise-de-mama\\mamografias"
-    filename = filedialog.askopenfilename(initialdir=initial_path, title="Selecione uma imagem", filetypes=(("Arquivos de imagem", "*.jpg;*.jpeg;*.png"), ("Todos os arquivos", "*.*")))
-    image = cv2.imread(filename)
-    result_image = remove_variacoes_imagem(image)
+def treat_image():
+    training_dir = "treino"
+    # Percorrer todas as pastas dentro do diretório de treino
+    for dirpath, dirnames, filenames in os.walk(training_dir):
+        for dirpath_class, dirnames_class, filenames_class in os.walk(dirpath):
+            # Percorre todos os arquivos
+            for arquive in filenames_class:
+                # Pega apenas os arquivos de imagem
+                if arquive.endswith(".png") or arquive.endswith(".jpg") or arquive.endswith(".jpeg"):
+                    path_image = os.path.join(dirpath_class, arquive)
+                    image = cv2.imread(path_image)
+                    # Remove variacoes de cores da imagem
+                    result_image = remove_image_variation_color(image)
 
-    # Área mínima para considerar um contorno como elemento principal
-    threshold_area = 30000  
-
-    # Remover elementos menores
-    result_image = remove_contornos_menores(result_image, threshold_area)
-
-    # Exibir a imagem resultante
-    cv2.imshow("Result Image", result_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+                    # Área mínima para considerar um contorno como elemento principal
+                    threshold_area = 10000  
+                    # Remove objetos menores que o threshold_area
+                    result_image = remove_small_items(result_image, threshold_area)
+                    # Sobre escreve imagens anteriores pelas pré-processadas
+                    cv2.imwrite(path_image, result_image)

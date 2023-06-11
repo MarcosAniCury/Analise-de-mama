@@ -7,41 +7,41 @@ from tensorflow.keras.models import Model, load_model
 from sklearn.metrics import classification_report, confusion_matrix
 
 
-def carregar_imagens():
+def load_image():
     # Diretórios de treino e teste
-    treino_dir = 'treino_mais'
-    teste_dir = 'teste'
+    training_dir = 'treino_mais'
+    test_dir = 'teste'
 
     # Criação do gerador de imagens de treino e teste
-    datagen_treino = ImageDataGenerator(rescale=1./255)
-    datagen_teste = ImageDataGenerator(rescale=1./255)
+    datagen_training = ImageDataGenerator(rescale=1./255)
+    datagen_test = ImageDataGenerator(rescale=1./255)
 
     # Carregar as imagens de treino
-    gerador_treino = datagen_treino.flow_from_directory(
-        treino_dir,
+    training_generator = datagen_training.flow_from_directory(
+        training_dir,
         # Tamanho das imagens de entrada esperado pela GoogLeNet
         target_size=(224, 224),
         batch_size=32,
         class_mode='categorical')
 
     # Carregar as imagens de teste
-    gerador_teste = datagen_teste.flow_from_directory(
-        teste_dir,
+    test_generator = datagen_test.flow_from_directory(
+        test_dir,
         target_size=(224, 224),
         batch_size=32,
         class_mode='categorical')
 
-    return gerador_treino, gerador_teste
+    return training_generator, test_generator
 
 
-def print_metricas(model, gerador_teste):
+def print_metricas(model, test_generator):
     # Avaliar o modelo no conjunto de teste
-    loss, accuracy = model.evaluate(gerador_teste)
+    loss, accuracy = model.evaluate(test_generator)
 
     # Gerar as previsões para o conjunto de teste
-    y_pred = model.predict(gerador_teste)
+    y_pred = model.predict(test_generator)
     y_pred_classes = y_pred.argmax(axis=1)
-    y_true = gerador_teste.classes
+    y_true = test_generator.classes
 
     # Calcular a matriz de confusão
     cm = confusion_matrix(y_true, y_pred_classes)
@@ -84,10 +84,10 @@ def print_metricas(model, gerador_teste):
     return metrics
 
 
-def GoogLenNet(arquive_name, already_trained, eBinarioClassificador):
+def GoogLenNet(arquive_name, already_trained, is_binarie_class):
     result_dir = "resultados"
     model = None
-    gerador_treino, gerador_teste = carregar_imagens()
+    training_generator, test_generator = load_image()
     if already_trained:
         model = load_model(os.path.join(result_dir, f"{arquive_name}.h5"))
     else:
@@ -101,7 +101,7 @@ def GoogLenNet(arquive_name, already_trained, eBinarioClassificador):
         x = Dense(1024, activation='relu')(x)
         output = Dense(4, activation='softmax')(x)
         loss = 'categorical_crossentropy'
-        if eBinarioClassificador:
+        if is_binarie_class:
             output = Dense(1, activation='sigmoid')(x)
             loss = 'binary_crossentropy'
 
@@ -113,9 +113,9 @@ def GoogLenNet(arquive_name, already_trained, eBinarioClassificador):
                       metrics=['accuracy'])
 
         # Treinamento do modelo usando o gerador de imagens
-        model.fit(gerador_treino, epochs=5, validation_data=gerador_teste)
+        model.fit(training_generator, epochs=5, validation_data=test_generator)
 
         # Salvar o modelo treinado
         model.save(os.path.join(result_dir, f"{arquive_name}.h5"))
 
-    return print_metricas(model, gerador_teste)
+    return print_metricas(model, test_generator)
