@@ -5,4 +5,4 @@ Projeto desenvolvido durante a matéria de analise e processamento de imagens pa
 
 - Marcos Ani Cury Vinagre Silva, 684903, Ciências da Computação, Coração Eucarístico
 
-- Ludmila Bruna Santos Nascimento, Ciências da Computação, 541564, Coração Eucarístico
+- Ludmila Bruna Santos Nascimento, 541564, Ciências da Computação, Coração Eucarístico
